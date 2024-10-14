@@ -1,0 +1,657 @@
+API NAME: create-sub
+API TYPE: Function
+API DESCRIPTION: This API endpoint is used to create subtitles for a video or audio file. It takes in the following parameters:
+- file: The video or audio file for which subtitles need to be created. This parameter is required.
+- source_lang: The source language of the video or audio file.
+- target_lang: The target language for translation. (Note: Translation to languages other than English is not supported)
+- patience: A boolean flag indicating if more precision is required.
+- translate: A boolean flag indicating if translation to English is required.
+- output_format: The format of the output subtitles. It can be either "srt" or "txt".
+- word_by_word: A boolean flag indicating if word-by-word subtitles are required.
+
+API URL: /create-sub
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "file": "video/audio file",
+  "source_lang": "source language",
+  "target_lang": "target language",
+  "patience": true,
+  "translate": true,
+  "output_format": "srt",
+  "word_by_word": false
+}
+```
+RESPONSE BODY:
+```json
+{
+  "status": "success",
+  "message": "Subtitles created successfully",
+  "subtitles": "Subtitle text"
+}
+```
+EXAMPLE REQUEST:
+1. Request Body:
+```json
+{
+  "file": "example.mp4",
+  "source_lang": "en",
+  "target_lang": "es",
+  "patience": true,
+  "translate": true,
+  "output_format": "srt",
+  "word_by_word": false
+}
+```
+2. Request Body:
+```json
+{
+  "file": "example.mp3",
+  "source_lang": "fr",
+  "target_lang": null,
+  "patience": false,
+  "translate": false,
+  "output_format": "txt",
+  "word_by_word": true
+}
+```
+Note: The above examples are for illustrative purposes only. The actual file names and language codes may vary.
+----------------------------------------------------------------------------------------------
+API NAME: Translate Function
+API TYPE: Function
+API DESCRIPTION: This API endpoint allows you to translate text from one language to another using the Naver Papago translation service. The API takes in the following parameters:
+- text (required): The text that you want to translate.
+- source (optional): The language code of the source text. If not provided, the API will try to detect the language automatically.
+- target (optional): The language code of the target translation. If not provided, the API will translate the text to English if the source language is Korean, and to Korean for any other source language.
+
+The API makes a POST request to the Naver Papago translation service API (https://openapi.naver.com/v1/papago/n2mt) with the provided parameters. It requires the following headers:
+- X-Naver-Client-Id: The client ID for accessing the Naver Papago translation service.
+- X-Naver-Client-Secret: The client secret for accessing the Naver Papago translation service.
+The response from the Naver Papago translation service API is then processed and returned as a JSON object with the translated text.
+
+API URL: /translate
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "text": "string",
+  "source": "string",
+  "target": "string"
+}
+```
+RESPONSE BODY:
+```json
+{
+  "text": "string"
+}
+```
+EXAMPLE REQUEST:
+1. Request:
+```json
+{
+  "text": "안녕하세요",
+  "source": "ko",
+  "target": "en"
+}
+```
+Response:
+```json
+{
+  "text": "Hello"
+}
+```
+
+2. Request:
+```json
+{
+  "text": "Hello",
+  "source": "en",
+  "target": "ko"
+}
+```
+Response:
+```json
+{
+  "text": "안녕하세요"
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: mergepdf
+API TYPE: Function
+API DESCRIPTION: This API endpoint allows you to merge multiple PDF files into a single PDF file. It takes in multiple PDF files as input and merges them together. The merged PDF file is then returned as the response.
+
+API URL: /mergepdf
+METHOD: POST
+
+REQUEST BODY:
+The request body should be in the following format:
+
+```json
+{
+  "files": ["filename1.pdf", "filename2.pdf"]
+}
+```
+
+RESPONSE BODY:
+The response body will be the merged PDF file.
+
+EXAMPLE REQUESTS:
+Example 1:
+Request:
+```json
+{
+  "files": ["file1.pdf", "file2.pdf"]
+}
+```
+Response: Merged PDF file
+
+Example 2:
+Request:
+```json
+{
+  "files": ["file3.pdf", "file4.pdf", "file5.pdf"]
+}
+```
+Response: Merged PDF file
+----------------------------------------------------------------------------------------------
+API NAME: stt function
+API TYPE: Function
+API DESCRIPTION: This API endpoint is used to convert speech audio files into text using the Naver Open API. It takes an audio file as input and returns the transcribed text. The supported audio file formats are mp3, aac, ac3, ogg, flac, and wav. The API also accepts an optional parameter, lang_code, which specifies the language of the audio file (default is Korean). The API makes a POST request to the Naver Open API endpoint for speech-to-text conversion and returns the transcribed text as a JSON response.
+
+API URL: /stt
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "audio_file": "file_data",
+  "lang_code": "language_code"
+}
+```
+- audio_file (required): The audio file to be transcribed. It should be uploaded as a file.
+- lang_code (optional): The language code of the audio file. Supported values are "Kor" (default), "Jpn", "Eng", and "Chn".
+
+RESPONSE BODY:
+```json
+{
+  "text": "transcribed_text"
+}
+```
+- text: The transcribed text from the audio file.
+
+EXAMPLE REQUEST:
+1. Request Body:
+```json
+{
+  "audio_file": "file_data",
+  "lang_code": "Eng"
+}
+```
+2. Request Body:
+```json
+{
+  "audio_file": "file_data"
+}
+```
+
+EXAMPLE RESPONSE:
+1. Response Body:
+```json
+{
+  "text": "Hello, how are you?"
+}
+```
+2. Response Body:
+```json
+{
+  "text": "안녕하세요, 반갑습니다."
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: Download Video
+API TYPE: Function
+API DESCRIPTION: This API endpoint allows you to download a video from a given link. It takes a link parameter as input and returns the downloaded video file as a response. The API uses the YouTube API to download the video and runs the download process in the background using background tasks.
+
+API URL: /api/download
+
+METHOD: POST
+
+REQUEST BODY:
+```
+{
+  "link": "string"
+}
+```
+
+PARAMETERS:
+- link (string): The link of the video to be downloaded.
+
+RESPONSE BODY:
+The API returns the downloaded video file as a response.
+
+EXAMPLE REQUESTS:
+1. Request:
+```
+POST /api/download
+
+{
+  "link": "https://www.youtube.com/watch?v=video_id"
+}
+```
+Response:
+The downloaded video file.
+
+2. Request:
+```
+POST /api/download
+
+{
+  "link": "https://www.youtube.com/watch?v=another_video_id"
+}
+```
+Response:
+The downloaded video file.
+----------------------------------------------------------------------------------------------
+API NAME: with_sub_download
+API TYPE: Function
+API DESCRIPTION: This API endpoint allows you to download a video with subtitles. It takes in a YouTube video link and optional parameters for translation and subtitle format. The API will download the video, extract the subtitles, and package them along with the video into a zip file for download. The zip file will contain the video file in MP4 format and the subtitles file in SRT format. The API will also clean up temporary files after the download is complete.
+
+API URL: /withsub
+METHOD: POST
+
+REQUEST BODY:
+The request body should be in JSON format and contain the following parameters:
+
+- link (string): The YouTube video link.
+- translate (boolean, optional): Whether to translate the subtitles. Default is false.
+- word_by_word (boolean, optional): Whether to generate word-by-word subtitles. Default is false.
+- output_format (string, optional): The format of the subtitles. Default is "srt".
+
+RESPONSE BODY:
+The response body will be a zip file containing the video and subtitles. The zip file will have the following structure:
+
+- [video_name].mp4: The video file in MP4 format.
+- [video_name].srt: The subtitles file in SRT format.
+
+EXAMPLE REQUEST:
+Example 1:
+Request Body:
+```json
+{
+  "link": "https://www.youtube.com/watch?v=abcd1234",
+  "translate": true,
+  "word_by_word": false,
+  "output_format": "srt"
+}
+```
+
+Example 2:
+Request Body:
+```json
+{
+  "link": "https://www.youtube.com/watch?v=efgh5678",
+  "translate": false,
+  "word_by_word": true,
+  "output_format": "vtt"
+}
+```
+
+EXAMPLE RESPONSE:
+Example 1:
+Response Body:
+A zip file containing the video and subtitles.
+
+Example 2:
+Response Body:
+A zip file containing the video and subtitles.
+
+Note: The actual response will be a downloadable file, not the JSON representation of the zip file.
+----------------------------------------------------------------------------------------------
+API NAME: meetings_create
+API TYPE: Plugin
+API DESCRIPTION: This API endpoint is used to create a new meeting in Zoom. It allows you to specify the meeting type, topic, agenda, password, and duration. The meeting type determines the type of meeting to be created, and it should be provided as an integer code. The available meeting types and their corresponding codes are as follows:
+- 1: Instant Meeting
+- 2: Scheduled Meeting
+- 3: Recurring Meeting with no fixed time
+- 8: Recurring Meeting with fixed time
+
+The request body should be in JSON format and include the following parameters:
+- token (string): The access token for authentication.
+- meeting_type (integer): The type of meeting to be created.
+- topic (string, optional): The topic or title of the meeting.
+- agenda (string, optional): The agenda or description of the meeting.
+- password (string, optional): The password required to join the meeting.
+- duration (integer, optional): The duration of the meeting in minutes.
+
+The response body will be in JSON format and will contain the details of the created meeting.
+
+API URL: /meetings/create
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "token": "string",
+  "meeting_type": "integer",
+  "topic": "string",
+  "agenda": "string",
+  "password": "string",
+  "duration": "integer"
+}
+```
+RESPONSE BODY:
+```json
+{
+  "meeting_id": "string",
+  "start_url": "string",
+  "join_url": "string",
+  "password": "string"
+}
+```
+EXAMPLE REQUEST:
+Example 1:
+```json
+{
+  "token": "abc123",
+  "meeting_type": 2,
+  "topic": "Team Meeting",
+  "agenda": "Discuss project updates",
+  "password": "123456",
+  "duration": 60
+}
+```
+Example 2:
+```json
+{
+  "token": "xyz789",
+  "meeting_type": 1,
+  "topic": "Quick Demo",
+  "agenda": "Showcasing new features",
+  "password": "abcdef",
+  "duration": 30
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: detect_lang
+API TYPE: Function
+API DESCRIPTION: This API endpoint is used to detect the language code of a given text. It takes a single parameter, "text", which is the text for which the language code needs to be detected. The API makes a POST request to the "https://openapi.naver.com/v1/papago/detectLangs" URL with the provided text. The request is authenticated using the "X-Naver-Client-Id" and "X-Naver-Client-Secret" headers. The response contains the detected language code in the "langCode" field. If the request is successful, the API returns a JSON object with the "langCode" field. If there is an error, the API raises an HTTPException with the corresponding status code and error message.
+
+API URL: /detect_lang
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "text": "string"
+}
+```
+RESPONSE BODY:
+```json
+{
+  "langCode": "string"
+}
+```
+EXAMPLE REQUESTS:
+1. Request:
+```json
+{
+  "text": "Hello, how are you?"
+}
+```
+Response:
+```json
+{
+  "langCode": "en"
+}
+```
+2. Request:
+```json
+{
+  "text": "안녕하세요"
+}
+```
+Response:
+```json
+{
+  "langCode": "ko"
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: render-sub
+API TYPE: Function
+API DESCRIPTION: This API endpoint is used for rendering subtitles onto a video file. It takes in two parameters: mp4file (the video file) and srtfile (the subtitle file). The API checks if the provided files are in the correct format (mp4 for video and srt for subtitles). If the files are valid, the API renders the subtitles onto the video file and returns the rendered video file as a response. The rendering process is performed asynchronously in the background.
+
+API URL: /render-sub
+METHOD: POST
+
+REQUEST BODY:
+{
+  "mp4file": "file",
+  "srtfile": "file"
+}
+
+RESPONSE BODY:
+{
+  "file": "file"
+}
+
+EXAMPLE REQUEST 1:
+Request Body:
+{
+  "mp4file": "video.mp4",
+  "srtfile": "subtitles.srt"
+}
+
+EXAMPLE RESPONSE 1:
+Response Body:
+{
+  "file": "rendered_video.mp4"
+}
+
+EXAMPLE REQUEST 2:
+Request Body:
+{
+  "mp4file": "video2.mp4",
+  "srtfile": "subtitles2.srt"
+}
+
+EXAMPLE RESPONSE 2:
+Response Body:
+{
+  "file": "rendered_video2.mp4"
+}
+----------------------------------------------------------------------------------------------
+API NAME: OCR Function
+API TYPE: Function
+API DESCRIPTION: This API endpoint allows you to perform OCR (Optical Character Recognition) on an image or PDF file. It takes in a file as input and returns the extracted text from the file in JSON format. The API performs validation to ensure that only files with valid formats (pdf, png, jpg, jpeg) are accepted. If an invalid file format is provided, a 400 Bad Request error is returned. If any error occurs during the OCR process, a 400 Bad Request error with the specific error message is returned.
+
+API URL: /ocr
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "file": "<file>"
+}
+```
+- file (required): The file to perform OCR on. Only files with valid formats (pdf, png, jpg, jpeg) are allowed.
+
+RESPONSE BODY:
+```json
+{
+  "text": "<extracted_text>"
+}
+```
+- text: The extracted text from the provided file.
+
+EXAMPLE REQUESTS:
+1. Request:
+```json
+{
+  "file": "<file_data>"
+}
+```
+Response:
+```json
+{
+  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+}
+```
+2. Request:
+```json
+{
+  "file": "<file_data>"
+}
+```
+Response:
+```json
+{
+  "text": "Hello, world!"
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: cutvideo
+API TYPE: Function
+API DESCRIPTION: This API endpoint allows you to cut a video file by specifying the start and end time in seconds. The API accepts a video file as input and returns the cut video file as output. The start_sec and end_sec parameters are optional and can be used to specify the desired start and end time for the cut. If no start_sec and end_sec are provided, the entire video will be returned. The API performs validation checks on the input parameters and raises an exception if there are any errors. The API uses the moviepy library to perform the video cutting operation.
+
+API URL: /cutvideo
+METHOD: POST
+REQUEST BODY:
+```json
+{
+  "start_sec": float (optional),
+  "end_sec": float (optional),
+  "file": "video file"
+}
+```
+
+RESPONSE BODY:
+```json
+{
+  "file": "cut video file"
+}
+```
+
+EXAMPLE REQUEST:
+1. Request:
+```json
+{
+  "start_sec": 10,
+  "end_sec": 30,
+  "file": "video.mp4"
+}
+```
+Response:
+```json
+{
+  "file": "cut.mp4"
+}
+```
+
+2. Request:
+```json
+{
+  "file": "video.mp4"
+}
+```
+Response:
+```json
+{
+  "file": "cut.mp4"
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: send_mail
+API TYPE: Plugin
+API DESCRIPTION: This API endpoint allows you to send an email using the Gmail plugin. It requires authentication and authorization to access the Gmail API. The API takes in the recipient's email address, subject, and the content of the email as parameters. It then uses the Gmail API to send the email from the authenticated user's email address. The response body will contain a success message if the email is sent successfully.
+
+API URL: /sendmail
+METHOD: POST
+
+REQUEST BODY:
+```json
+{
+  "to": "string",
+  "subject": "string",
+  "mail_text": "string"
+}
+```
+
+RESPONSE BODY:
+```json
+{
+  "detail": "string"
+}
+```
+
+EXAMPLE REQUEST 1:
+```json
+{
+  "to": "example@example.com",
+  "subject": "Hello",
+  "mail_text": "This is the content of the email."
+}
+```
+
+EXAMPLE RESPONSE 1:
+```json
+{
+  "detail": "successfully done."
+}
+```
+
+EXAMPLE REQUEST 2:
+```json
+{
+  "to": "another@example.com",
+  "subject": "Meeting Reminder",
+  "mail_text": "Don't forget about the meeting tomorrow."
+}
+```
+
+EXAMPLE RESPONSE 2:
+```json
+{
+  "detail": "successfully done."
+}
+```
+----------------------------------------------------------------------------------------------
+API NAME: qr function
+API TYPE: Function
+API DESCRIPTION: This API endpoint generates a QR code image for a given URL. It takes a URL as a parameter and returns the QR code image as a response. The URL should be provided in the request body as a string.
+
+API URL: /qr
+METHOD: POST
+
+REQUEST BODY:
+{
+  "url": "string"
+}
+
+RESPONSE BODY:
+The response body is a PNG image file.
+
+EXAMPLE REQUESTS:
+Example 1:
+Request:
+POST /qr
+Content-Type: application/json
+
+{
+  "url": "https://example.com"
+}
+
+Response:
+Content-Type: image/png
+[QR code image]
+
+Example 2:
+Request:
+POST /qr
+Content-Type: application/json
+
+{
+  "url": "https://api.example.com"
+}
+
+Response:
+Content-Type: image/png
+[QR code image]
+----------------------------------------------------------------------------------------------
